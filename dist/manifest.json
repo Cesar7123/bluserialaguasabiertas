@@ -1,0 +1,31 @@
+{
+    "name": "Blu Serial Aguas Abiertas",
+    "short_name": "Blu Aguas Abiertas",
+    "description": "Eventos de natación en aguas abiertas en La Paz, Baja California Sur",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1e40af",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "sports",
+        "lifestyle",
+        "health"
+    ],
+    "lang": "es-MX",
+    "dir": "ltr"
+}

@@ -1,3 +1,10 @@
+export interface SwimRouteData {
+  label: string;
+  color: string;
+  path: [number, number, boolean][]; // [lat, lng, isBuoy]
+  isLoop: boolean;
+}
+
 export interface SwimEvent {
   id: string;
   title: string;
@@ -11,63 +18,260 @@ export interface SwimEvent {
   mapDescription: string;
   registrationLink: string;
   price: string;
+  routes: SwimRouteData[];
+}
+
+function buildRoute(
+  label: string,
+  color: string,
+  path: [number, number, boolean][],
+  isLoop: boolean
+): SwimRouteData {
+  return { label, color, path, isLoop };
+}
+
+/* ── Helper to generate legacy out-and-back paths ── */
+function generatePath(
+  startLat: number,
+  startLng: number,
+  deltaLat: number,
+  deltaLng: number,
+  buoyCount: number
+): [number, number, boolean][] {
+  const path: [number, number, boolean][] = [[startLat, startLng, false]];
+
+  for (let i = 1; i <= buoyCount; i++) {
+    const t = i / (buoyCount + 1);
+    path.push([startLat + deltaLat * t, startLng + deltaLng * t, true]);
+  }
+
+  path.push([startLat + deltaLat, startLng + deltaLng, true]);
+
+  for (let i = buoyCount; i >= 1; i--) {
+    const t = i / (buoyCount + 1);
+    path.push([startLat + deltaLat * t, startLng + deltaLng * t, true]);
+  }
+
+  path.push([startLat, startLng, false]);
+
+  return path;
 }
 
 export const swimEvents: SwimEvent[] = [
   {
-    id: "el-coromuel",
-    title: "El Coromuel",
-    shortDescription: "A scenic 5km swim through the crystal-clear waters of La Paz Bay",
-    date: "24 de mayo del 2026",
-    distance: "500 mts, 750 mts, 1.5 km, 3 km",
-    difficulty: "Intermedio",
-    location: "La Paz, BCS",
-    description: "Experience the breathtaking beauty of La Paz Bay with this challenging 5km open water swim. Navigate through calm turquoise waters while enjoying views of the Malecón and surrounding mountains. This swim is perfect for intermediate swimmers looking to test their endurance in one of Mexico's most beautiful coastal settings. The course follows the bay's natural curve, offering protection from strong currents while providing an authentic open water experience.",
-    heroImage: "https://images.unsplash.com/photo-1619707284867-922f30e176e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcGVuJTIwd2F0ZXIlMjBzd2ltbWluZyUyMG9jZWFufGVufDF8fHx8MTc3MDM0NDMyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-    mapDescription: "The swim starts at Playa Coromuel, follows the coastline north for 2.5km, then returns along the same route. Water depth ranges from 3-15 meters with excellent visibility. Safety boats will be positioned every 500 meters.",
-    registrationLink: "#register",
-    price: "$850 MXN"
+    id: 'el-coromuel',
+    title: 'El Coromuel',
+    shortDescription: 'Primera etapa del serial en la icónica Playa El Coromuel',
+    date: 'Domingo 24 de mayo de 2026',
+    distance: '500 m · 750 m · 1.5 km · 3 km',
+    difficulty: 'Intermedio',
+    location: 'Playa El Coromuel, La Paz, BCS',
+    description:
+      'Da inicio al BLU Serial Aguas Abiertas 2026 en la emblemática Playa El Coromuel. La distancia de 500 metros está abierta a infantiles y principiantes; no suma puntos para el serial. Las distancias de 750 m, 1.5 km y 3 km suman puntos para el marcador overall. Hora de inicio: 7:00 a.m. Cupo limitado a 150 nadadores.',
+    heroImage: '/coromuel.jpeg',
+    mapDescription:
+      'Salida desde Playa El Coromuel. El recorrido sigue la curva natural de la bahía de La Paz. Embarcaciones de seguridad posicionadas cada 500 metros.',
+    registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas',
+    price: '$850 MXN',
+    routes: [
+      buildRoute('500 m', '#2563EB',
+        [
+          [24.195952, -110.300880, false],
+          [24.196327, -110.301477, false],
+          [24.197356, -110.301136, false],
+          [24.198276, -110.301254, true],
+          [24.198276, -110.301254, false],
+        ],
+        true),
+      buildRoute('750 m', '#3B82F6',
+        [
+          [24.195952, -110.300880, false],
+          [24.196327, -110.301477, false],
+          [24.197356, -110.301136, false],
+          [24.198276, -110.301254, true],
+          [24.198966, -110.301160, true],
+        ],
+        true),
+      buildRoute('1500 m', '#143b8e',
+        [
+          [24.195952, -110.300880, false],
+          [24.196327, -110.301477, false],
+          [24.197356, -110.301136, false],
+          [24.198276, -110.301254, true],
+          [24.198966, -110.301160, true],
+          [24.202568, -110.301453, true],
+        ],
+        true),
+      buildRoute('3000 m', '#0ea5e9',
+        [
+          [24.195952, -110.300880, false],
+          [24.196327, -110.301477, false],
+          [24.197356, -110.301136, false],
+          [24.198276, -110.301254, true],
+          [24.198966, -110.301160, true],
+          [24.202568, -110.301453, true],
+          [24.206077, -110.301061, false],
+          [24.209231, -110.301337, true],
+        ],
+        true),
+    ],
   },
   {
-    id: "el-caimancito",
-    title: "El Caimancito",
-    shortDescription: "Swim through a UNESCO World Heritage marine park",
-    date: "April 22, 2026",
-    distance: "500 mts, 750 mts, 1.5 km, 3 km",
-    difficulty: "Intermedio",
-    location: "Cabo Pulmo, BCS",
-    description: "Dive into the wonder of Cabo Pulmo National Marine Park, home to one of the oldest coral reefs in North America. This 3km swim offers participants a unique opportunity to swim through protected waters teeming with marine life. Swimmers may encounter schools of tropical fish, sea turtles, and rays in this ecological paradise. The relatively short distance makes it accessible to less experienced open water swimmers while still providing an unforgettable adventure.",
-    heroImage: "https://images.unsplash.com/photo-1619707284867-922f30e176e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcGVuJTIwd2F0ZXIlMjBzd2ltbWluZyUyMG9jZWFufGVufDF8fHx8MTc3MDM0NDMyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-    mapDescription: "Starting from the main beach, the route follows the outer reef edge southward for 1.5km before turning back. Average depth is 5-10 meters. The swim takes place during calm morning hours for optimal visibility and safety.",
-    registrationLink: "#register",
-    price: "$950 MXN"
+    id: 'el-caimancito',
+    title: 'El Caimancito',
+    shortDescription: 'Segunda etapa en la tranquila Playa El Caimancito',
+    date: 'Domingo 05 de julio de 2026',
+    distance: '500 m · 750 m · 1.5 km · 3 km',
+    difficulty: 'Intermedio',
+    location: 'Playa El Caimancito, La Paz, BCS',
+    description:
+      'La segunda etapa del serial te espera en Playa El Caimancito, conocida por sus aguas tranquilas y su ambiente familiar. Un escenario perfecto para continuar sumando puntos en el serial. Hora de inicio: 7:00 a.m. Cupo limitado a 150 nadadores.',
+    heroImage: '/caimancito.jpeg',
+    mapDescription:
+      'Salida desde Playa El Caimancito. Recorrido paralelo a la costa con aguas generalmente tranquilas. Seguridad acuática proporcionada por Natación Flippers.',
+    registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas',
+    price: '$850 MXN',
+    routes: [
+      buildRoute('500 m', '#2563EB',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, true],
+        ],
+        true),
+      buildRoute('750 m', '#3B82F6',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, true],
+        ],
+        true),
+      buildRoute('1500 m', '#143b8e',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, true],
+          [24.212075, -110.301351, true],
+        ],
+        true),
+      buildRoute('3000 m', '#0ea5e9',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, false],
+          [24.212075, -110.301351, false],
+          [24.214402, -110.301408, false],
+          [24.216272, -110.305416, true],
+        ],
+        true),
+    ],
   },
   {
-    id: "el-tecolote",
-    title: "El Tecolote",
-    shortDescription: "An extreme 10km ocean swim for experienced athletes",
-    date: "May 10, 2026",
-    distance: "500 mts, 750 mts, 1.5 km, 3 km",
-    difficulty: "Intermedio",
-    location: "Todos Santos, BCS",
-    description: "The ultimate test for experienced open water swimmers. This challenging 10km swim takes place in the Pacific waters off Todos Santos, known for its powerful waves and strong currents. Only swimmers with proven open water experience and excellent physical conditioning should attempt this event. The course offers stunning views of the rugged coastline and provides an adrenaline-pumping experience that will test both mental and physical endurance. Support kayaks and safety boats accompany all swimmers throughout the journey.",
-    heroImage: "https://images.unsplash.com/photo-1619707284867-922f30e176e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcGVuJTIwd2F0ZXIlMjBzd2ltbWluZyUyMG9jZWFufGVufDF8fHx8MTc3MDM0NDMyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-    mapDescription: "The course begins at Playa Las Palmas and follows the coastline south for 5km before turning around at Punta Lobos. Swimmers face Pacific swells and must navigate around rocky outcrops. Water temperature averages 20-22°C. Mandatory safety briefing required.",
-    registrationLink: "#register",
-    price: "$1,200 MXN"
+    id: 'el-tecolote',
+    title: 'El Tecolote',
+    shortDescription: 'Tercera etapa en la espectacular Playa El Tecolote',
+    date: 'Domingo 09 de agosto de 2026',
+    distance: '500 m · 750 m · 1.5 km · 3 km',
+    difficulty: 'Intermedio',
+    location: 'Playa El Tecolote, La Paz, BCS',
+    description:
+      'La tercera etapa nos lleva a Playa El Tecolote, famosa por sus aguas cristalinas de tonos turquesa y su impresionante vista hacia la Isla Espíritu Santo. Hora de inicio: 7:00 a.m. Cupo limitado a 150 nadadores.',
+    heroImage:
+      '/tecolote.jpeg',
+    mapDescription:
+      'Salida desde Playa El Tecolote con vistas panorámicas a la Isla Espíritu Santo. Recorrido costero con aguas cristalinas de alta visibilidad.',
+    registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas',
+    price: '$850 MXN',
+    routes: [
+      buildRoute('500 m', '#2563EB',
+        [
+          [24.336348, -110.322735, false],
+          [24.336269, -110.325064, true],
+        ],
+        true),
+      buildRoute('750 m', '#3B82F6',
+        [
+          [24.336348, -110.322735, false],
+          [24.336269, -110.325064, false],
+          [24.335527, -110.326306, true],
+        ],
+        true),
+      buildRoute('1500 m', '#143b8e',
+        [
+          [24.336348, -110.322735, false],
+          [24.336269, -110.325064, false],
+          [24.335527, -110.326306, false],
+          [24.334762, -110.327681, false],
+          [24.333095, -110.329158, true],
+        ],
+        true),
+      buildRoute('3000 m', '#0ea5e9',
+        [
+          [24.336348, -110.322735, false],
+          [24.336269, -110.325064, false],
+          [24.335527, -110.326306, false],
+          [24.334762, -110.327681, false],
+          [24.333095, -110.329158, false],
+          [24.328800, -110.334544, true],
+        ],
+        true),
+    ],
   },
   {
-    id: "playa-pichilingue",
-    title: "Playa Pichilingue",
-    shortDescription: "Monthly 2km evening swims perfect for all levels",
-    date: "Every last Friday of the month",
-    distance: "500 mts, 750 mts, 1.5 km, 3 km, 6 km",
-    difficulty: "Intermedio",
-    location: "Various locations in BCS",
-    description: "Join our popular monthly Sunset Swim Series, a social and relaxed 2km swim held at different beaches across Baja California Sur. These evening swims are designed to bring the swimming community together in a non-competitive environment. Perfect for beginners wanting to gain open water experience or advanced swimmers looking for a casual training session. Each event ends with a beach gathering where participants can share stories, enjoy refreshments, and watch the spectacular Baja sunset.",
-    heroImage: "https://images.unsplash.com/photo-1619707284867-922f30e176e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcGVuJTIwd2F0ZXIlMjBzd2ltbWluZyUyMG9jZWFufGVufDF8fHx8MTc3MDM0NDMyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-    mapDescription: "Routes vary by location but all follow a simple out-and-back format of 1km each way. Courses are chosen for calm conditions and beautiful sunset views. Check monthly announcements for specific locations and course details.",
-    registrationLink: "#register",
-    price: "$350 MXN per event"
-  }
+    id: 'playa-pichilingue',
+    title: 'Playa Pichilingue',
+    shortDescription: 'Gran final del serial con la distancia especial de 6 km',
+    date: 'Domingo 22 de noviembre de 2026',
+    distance: '500 m · 750 m · 1.5 km · 3 km · 6 km',
+    difficulty: 'Intermedio',
+    location: 'Playa Pichilingue, La Paz, BCS',
+    description:
+      'La gran final del BLU Serial Aguas Abiertas 2026 se celebra en Playa Pichilingue. Esta etapa especial incluye la distancia de 6 km, el mayor desafío del serial. Hora de inicio: 7:00 a.m. Cupo limitado a 150 nadadores.',
+    heroImage:
+      '/pichilingue.jpeg',
+    mapDescription:
+      'Salida desde Playa Pichilingue. Recorrido costero con opción de 6 km — la distancia más larga del serial. Embarcaciones de apoyo y kayaks de seguridad.',
+    registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas',
+    price: '$850 MXN',
+    routes: [
+      buildRoute('500 m', '#2563EB',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, true],
+        ],
+        true),
+      buildRoute('750 m', '#3B82F6',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, true],
+        ],
+        true),
+      buildRoute('1500 m', '#143b8e',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, true],
+          [24.212075, -110.301351, true],
+        ],
+        true),
+      buildRoute('3000 m', '#0ea5e9',
+        [
+          [24.205722, -110.300281, false],
+          [24.205906, -110.300989, false],
+          [24.207838, -110.301096, false],
+          [24.208462, -110.301186, false],
+          [24.212075, -110.301351, false],
+          [24.214402, -110.301408, false],
+          [24.216272, -110.305416, true],
+        ],
+        true),
+    ],
+  },
 ];

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import {
-  Waves,
   MapPin,
   Users,
   Award,
@@ -25,6 +25,14 @@ import { swimEvents } from '../data/events';
 import { toast } from 'sonner';
 
 export default function LandingPage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,25 +49,61 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1650166551215-0796207fae73?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWElMjBvZiUyMGNvcnRleiUyMGJhamElMjBjYWxpZm9ybmlhfGVufDF8fHx8MTc3MDM0NDMyNXww&ixlib=rb-4.1.0&q=80&w=1080"
-          alt="Blu serial aguas abiertas"
+      <section
+        id="home"
+        ref={heroRef}
+        className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden"
+      >
+        <video
+          src="/hero.MP4"
+          autoPlay
+          loop
+          muted
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ y: heroY }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-blue-900/40 to-blue-900/60" />
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <Waves className="size-20 text-white mx-auto mb-6" />
-          <h1 className="text-5xl md:text-7xl text-white mb-6">
+        <motion.div
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          style={{ opacity: heroOpacity }}
+        >
+          {/* <motion.img
+            src="/shark.svg"
+            alt="Blu"
+            className="size-24 md:size-32 mx-auto mb-6 animate-float"
+            initial={{ opacity: 0, scale: 0.5, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          /> */}
+          <motion.h1
+            className="text-5xl md:text-7xl text-white mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
             Blu serial aguas abiertas
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p
+            className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
             Diseñado para desafiar a
             atletas de todos los niveles; disfruta la belleza natural y la
             diversidad marina del Golfo de California.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+          >
             <Button
               size="lg"
               className="text-lg px-8"
@@ -75,168 +119,299 @@ export default function LandingPage() {
             >
               Contactanos
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl mb-6">About Our Events</h2>
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl mb-6">Sobre el Serial</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Organizamos eventos de natación en aguas abiertas en las impresionantes aguas de Baja California Sur, México
+              El serial de natación en aguas abiertas más prestigioso del noroeste de México
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="inline-flex items-center justify-center size-16 bg-blue-100 rounded-full mb-6">
-                <MapPin className="size-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl mb-4">Ubicaciones espectaculares</h3>
-              <p className="text-gray-600">
-                Nadar en aguas cristalinas con vistas impresionantes de la costa de Baja California Sur, desde bahías tranquilas hasta olas desafiantes del Pacífico.
-              </p>
-            </Card>
-
-            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="inline-flex items-center justify-center size-16 bg-blue-100 rounded-full mb-6">
-                <Users className="size-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl mb-4">Todos los niveles</h3>
-              <p className="text-gray-600">
-                Ya seas principiante o nadador experimentado, tenemos eventos diseñados para cada nivel de habilidad.
-              </p>
-            </Card>
-
-            <Card className="p-8 text-center hover:shadow-lg transition-shadow">
-              <div className="inline-flex items-center justify-center size-16 bg-blue-100 rounded-full mb-6">
-                <Award className="size-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl mb-4">Organización profesional</h3>
-              <p className="text-gray-600">
-                La seguridad es lo primero con personal experimentado, embarcaciones de apoyo y planificación integral para cada evento.
-              </p>
-            </Card>
+            {[
+              {
+                icon: <MapPin className="size-8 text-blue-600" />,
+                title: '4 sedes icónicas',
+                desc: 'Coromuel, Caimancito, Tecolote y Pichilingue. Las playas más emblemáticas de la bahía de La Paz como escenario de competencia.',
+              },
+              {
+                icon: <Users className="size-8 text-blue-600" />,
+                title: 'Todos los niveles',
+                desc: 'Distancias desde 500 m para infantiles y principiantes hasta 6 km para nadadores experimentados. Ramas femenil y varonil.',
+              },
+              {
+                icon: <Award className="size-8 text-blue-600" />,
+                title: 'Organización profesional',
+                desc: 'Seguridad acuática con Natación Flippers, embarcaciones de apoyo, servicio de primeros auxilios y abastecimiento en meta.',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+              >
+                <Card className="p-8 text-center hover:shadow-lg transition-shadow h-full">
+                  <div className="inline-flex items-center justify-center self-center size-16 bg-blue-100 rounded-full mb-6">
+                    {item.icon}
+                  </div>
+                  <h3 className="text-2xl mb-4">{item.title}</h3>
+                  <p className="text-gray-600">{item.desc}</p>
+                </Card>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="mt-16 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-8 md:p-12">
+          <motion.div
+            className="mt-16 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-8 md:p-12"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7 }}
+          >
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <h3 className="text-3xl mb-4">¿Por qué Baja California Sur?</h3>
+                <h3 className="text-3xl mb-4">Misión, Visión y Objetivo</h3>
                 <p className="text-gray-700 mb-4">
-                  Baja California Sur ofrece algunas de las condiciones más hermosas y diversas del mundo para practicar natación en aguas abiertas. Con aguas cristalinas, abundante vida marina y temperaturas cálidas durante todo el año, es el destino perfecto para los amantes de las aguas abiertas.
+                  <strong>Misión:</strong> Ser el serial de natación en aguas abiertas más prestigioso del noroeste de México, ofreciendo a los atletas inolvidables experiencias en el Golfo de California.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  <strong>Visión:</strong> Convertirnos en un referente nacional e internacional de la natación en aguas abiertas, promoviendo la salud, el deporte y la conservación de los ecosistemas marinos en BCS.
                 </p>
                 <p className="text-gray-700">
-                  Nuestros eventos aprovechan bahías protegidas, sitios declarados Patrimonio de la Humanidad por la UNESCO y costas espectaculares del Pacífico para brindar experiencias de natación únicas y memorables.
+                  <strong>Objetivo:</strong> Priorizamos tres ejes importantes para BCS: <strong>la salud, el deporte y la conservación de los ecosistemas marinos</strong>.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">300+</div>
-                  <div className="text-gray-600">Días de sol</div>
-                </div>
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">24°C</div>
-                  <div className="text-gray-600">Temperatura promedio del agua</div>
-                </div>
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">1000+</div>
-                  <div className="text-gray-600">Nadadores anualmente</div>
-                </div>
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">12</div>
-                  <div className="text-gray-600">Eventos por año</div>
-                </div>
+                {[
+                  { num: '4', label: 'Nados del serial' },
+                  { num: '5', label: 'Distancias' },
+                  { num: '150', label: 'Cupo por evento' },
+                  { num: '7:00', label: 'Hora de inicio' },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    className="bg-white rounded-lg p-6 text-center"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                  >
+                    <div className="text-3xl font-bold text-blue-600 mb-2">{stat.num}</div>
+                    <div className="text-gray-600">{stat.label}</div>
+                  </motion.div>
+                ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Swims Section */}
       <section id="swims" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl md:text-5xl mb-6">Próximos eventos</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Elige entre nuestra selección de eventos de natación en aguas abiertas durante todo el año
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {swimEvents.map((event) => (
-              <Card key={event.id} className="overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={event.heroImage}
-                    alt={event.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-white px-4 py-2 rounded-full font-medium">
-                    {event.price}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl mb-3">{event.title}</h3>
-                  <p className="text-gray-600 mb-4">{event.shortDescription}</p>
-
-                  <div className="grid grid-cols-3 gap-4 mb-6 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="size-4 text-blue-600 shrink-0" />
-                      <span className="text-gray-600 truncate">{event.date.split(',')[0]}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Ruler className="size-4 text-blue-600 shrink-0" />
-                      <span className="text-gray-600">{event.distance}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="size-4 text-blue-600 shrink-0" />
-                      <span className="text-gray-600 truncate">{event.difficulty}</span>
+            {swimEvents.map((event, i) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.15 }}
+              >
+                <Card className="overflow-hidden hover:shadow-xl transition-shadow h-full">
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={event.heroImage}
+                      alt={event.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 right-4 bg-white px-4 py-2 rounded-full font-medium">
+                      {event.price}
                     </div>
                   </div>
+                  <div className="p-6">
+                    <h3 className="text-2xl mb-3">{event.title}</h3>
+                    <p className="text-gray-600 mb-4">{event.shortDescription}</p>
 
-                  <Link to={`/event/${event.id}`}>
-                    <Button className="w-full group">
-                      Ver detalles
-                      <ChevronRight className="size-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
+                    <div className="grid grid-cols-3 gap-4 mb-6 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="size-4 text-blue-600 shrink-0" />
+                        <span className="text-gray-600 truncate">{event.date.split(',')[0]}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Ruler className="size-4 text-blue-600 shrink-0" />
+                        <span className="text-gray-600">{event.distance}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="size-4 text-blue-600 shrink-0" />
+                        <span className="text-gray-600 truncate">{event.difficulty}</span>
+                      </div>
+                    </div>
+
+                    <Link to={`/event/${event.id}`}>
+                      <Button className="w-full group">
+                        Ver detalles
+                        <ChevronRight className="size-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section id="partners" className="py-20 bg-white">
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl mb-6">Nuestros socios</h2>
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl mb-6">Inscripciones</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Trabajamos con organizaciones líderes para ofrecer eventos excepcionales
+              Elige la modalidad que mejor se adapte a ti y asegura tu lugar en el serial
             </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {[
+              {
+                title: 'Nado individual',
+                price: '$850 MXN',
+                desc: 'Por nado. Válido hasta el miércoles previo a cada evento.',
+                features: [
+                  'Acceso a 1 nado',
+                  'Gorro de natación oficial',
+                  'Medalla de participación',
+                  'Seguridad acuática',
+                  'Abastecimiento en meta',
+                ],
+                border: 'border-blue-100',
+                badge: null,
+              },
+              {
+                title: 'Serial completo',
+                price: '$3,000 MXN',
+                desc: 'Precio temprano. Hasta el 20 de Mayo de 2026.',
+                features: [
+                  'Acceso a los 4 nados',
+                  'Gorro de natación oficial (1)',
+                  'Medalla de participación por nado',
+                  'Trofeo al primer lugar',
+                  'Puntuación para serial',
+                ],
+                border: 'border-blue-600',
+                badge: 'RECOMENDADO',
+              }
+            ].map((plan, i) => (
+              <motion.div
+                key={plan.title + plan.price}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+              >
+                <Card className={`p-8 text-center hover:shadow-xl transition-shadow border-2 ${plan.border} relative h-full flex flex-col`}>
+                  {plan.badge && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      {plan.badge}
+                    </div>
+                  )}
+                  <h3 className="text-2xl mb-2">{plan.title}</h3>
+                  <div className="text-4xl font-bold text-blue-600 mb-4">{plan.price}</div>
+                  <p className="text-gray-600 mb-6">{plan.desc}</p>
+                  <ul className="text-left text-sm text-gray-600 space-y-2 mb-6 flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f}>✓ {f}</li>
+                    ))}
+                  </ul>
+                  <Button className="w-full" asChild>
+                    <a href="https://www.huamdeportiva.com/blu-serial-aguas-abiertas" target="_blank" rel="noopener noreferrer">
+                      Inscribirme
+                    </a>
+                  </Button>
+                </Card>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="text-center mt-8 text-gray-600">
+            <p>Precio tardío del serial completo: <strong>$3,000 MXN</strong> (del 1 de abril al 20 de mayo de 2026)</p>
+            <p className="text-sm mt-2">⚠️ No habrá reembolso. Las inscripciones son intransferibles.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section id="partners" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl mb-6">Colaboradores</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Gracias a quienes hacen posible este serial
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              'BCS Tourism Board',
-              'La Paz Municipality',
-              'Cabo Pulmo National Park',
-              'Pacific Open Water',
-              'Sea of Cortez Foundation',
-              'BCS Lifeguard Association',
-              'Marina La Paz',
-              'Baja Adventure Company'
+              { name: 'HUAM Deportiva', desc: 'Organización de eventos deportivos en BCS' },
+              { name: 'Tania Robles Natación', desc: 'Rayas by Tania Robles' },
+              { name: 'CEMDA', desc: 'Centro Mexicano de Derecho Ambiental, A.C.' },
+              { name: 'Natación Flippers', desc: 'Salvamento acuático y guardavidas' },
             ].map((partner, index) => (
-              <Card key={index} className="p-8 flex items-center justify-center hover:shadow-lg transition-shadow">
-                <div className="text-center">
-                  <Heart className="size-12 text-blue-600 mx-auto mb-3" />
-                  <p className="font-medium text-gray-700">{partner}</p>
-                </div>
-              </Card>
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: index * 0.12 }}
+              >
+                <Card className="p-8 text-center hover:shadow-lg transition-shadow h-full">
+                  <div className="text-center">
+                    <Heart className="size-12 text-blue-600 mx-auto mb-3" />
+                    <p className="font-bold text-gray-800 mb-1">{partner.name}</p>
+                    <p className="text-sm text-gray-500">{partner.desc}</p>
+                  </div>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -245,56 +420,25 @@ export default function LandingPage() {
       {/* Sponsors Section */}
       <section id="sponsors" className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl mb-6">Nuestros patrocinadores</h2>
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl mb-6">Patrocinadores</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Gracias a nuestros patrocinadores que hacen posible estos eventos
+              ¿Te interesa patrocinar el serial? Conecta tu marca con la comunidad de natación en aguas abiertas.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="space-y-12">
-            {/* Title Sponsors */}
-            <div>
-              <h3 className="text-2xl text-center mb-8 text-gray-700">Patrocinadores principales</h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                {[
-                  'AquaSport Equipment',
-                  'Ocean Safety Systems',
-                  'Baja Wellness Resort'
-                ].map((sponsor, index) => (
-                  <Card key={index} className="p-12 flex items-center justify-center hover:shadow-xl transition-shadow">
-                    <div className="text-center">
-                      <Waves className="size-16 text-blue-600 mx-auto mb-4" />
-                      <p className="text-xl font-medium text-gray-800">{sponsor}</p>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-
-            {/* Supporting Sponsors */}
-            <div>
-              <h3 className="text-xl text-center mb-8 text-gray-600">Patrocinadores</h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                {[
-                  'SwimTech',
-                  'Hydration Plus',
-                  'Sports Nutrition Co',
-                  'Fitness Tracker Pro',
-                  'Beach Hotels BCS',
-                ].map((sponsor, index) => (
-                  <Card key={index} className="p-6 flex items-center justify-center hover:shadow-lg transition-shadow">
-                    <p className="font-medium text-gray-600 text-center text-sm">{sponsor}</p>
-                  </Card>
-                ))}
-              </div>
-            </div>
-
-            <div className="text-center pt-8">
-              <Button variant="outline" size="lg">
+          <div className="text-center">
+            <Button variant="outline" size="lg" asChild>
+              <a href="mailto:bluaguasabiertas@gmail.com">
                 Conviértete en patrocinador
-              </Button>
-            </div>
+              </a>
+            </Button>
           </div>
         </div>
       </section>
@@ -302,68 +446,87 @@ export default function LandingPage() {
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl md:text-5xl mb-6">Ponte en contacto</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               ¿Tienes preguntas? ¿Quieres registrarte? Nos encantaría saber de ti
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <Card className="p-8">
-              <h3 className="text-2xl mb-6">Envíanos un mensaje</h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <Label htmlFor="name">Nombre *</Label>
-                  <Input
-                    id="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Your full name"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+52 612 123 4567"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="message">Mensaje *</Label>
-                  <Textarea
-                    id="message"
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Cuéntanos sobre tu experiencia en natación y qué evento te interesa..."
-                    rows={5}
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full">
-                  Enviar mensaje
-                </Button>
-              </form>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card className="p-8 h-full">
+                <h3 className="text-2xl mb-6">Envíanos un mensaje</h3>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <Label htmlFor="name">Nombre *</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Tu nombre completo"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="tu@email.com"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Teléfono</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="612 203 1658"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="message">Mensaje *</Label>
+                    <Textarea
+                      id="message"
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Cuéntanos sobre tu experiencia en natación y qué evento te interesa..."
+                      rows={5}
+                    />
+                  </div>
+                  <Button type="submit" size="lg" className="w-full">
+                    Enviar mensaje
+                  </Button>
+                </form>
+              </Card>
+            </motion.div>
 
             {/* Contact Info */}
-            <div className="space-y-8">
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+            >
               <Card className="p-8">
                 <h3 className="text-2xl mb-6">Información de contacto</h3>
                 <div className="space-y-6">
@@ -371,8 +534,8 @@ export default function LandingPage() {
                     <Mail className="size-6 text-blue-600 mt-1 shrink-0" />
                     <div>
                       <div className="font-medium mb-1">Email</div>
-                      <a href="mailto:info@bcsopenwater.com" className="text-blue-600 hover:underline">
-                        info@bcsopenwater.com
+                      <a href="mailto:bluaguasabiertas@gmail.com" className="text-blue-600 hover:underline">
+                        bluaguasabiertas@gmail.com
                       </a>
                     </div>
                   </div>
@@ -380,8 +543,8 @@ export default function LandingPage() {
                     <Phone className="size-6 text-blue-600 mt-1 shrink-0" />
                     <div>
                       <div className="font-medium mb-1">Teléfono</div>
-                      <a href="tel:+526121234567" className="text-blue-600 hover:underline">
-                        +52 612 123 4567
+                      <a href="tel:+526122031658" className="text-blue-600 hover:underline">
+                        612 203 1658
                       </a>
                     </div>
                   </div>
@@ -391,37 +554,47 @@ export default function LandingPage() {
                       <div className="font-medium mb-1">Ubicación</div>
                       <p className="text-gray-600">
                         La Paz, Baja California Sur<br />
-                        México, C.P. 23000
+                        México
                       </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <Calendar className="size-6 text-blue-600 mt-1 shrink-0" />
+                    <div>
+                      <div className="font-medium mb-1">Inscripciones</div>
+                      <a href="https://www.huamdeportiva.com/blu-serial-aguas-abiertas" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                        www.huamdeportiva.com
+                      </a>
                     </div>
                   </div>
                 </div>
               </Card>
 
               <Card className="p-8 bg-gradient-to-br from-blue-50 to-cyan-50">
-                <h3 className="text-xl mb-4">Horario de oficina</h3>
+                <h3 className="text-xl mb-4">Paquete del competidor</h3>
                 <div className="space-y-2 text-gray-700">
-                  <p>Lunes - Viernes: 9:00 AM - 6:00 PM</p>
-                  <p>Sábado: 10:00 AM - 2:00 PM</p>
-                  <p>Domingo: Cerrado</p>
+                  <p>• Gorra de natación oficial</p>
+                  <p>• Abastecimiento de recuperación en meta</p>
+                  <p>• Servicio de primeros auxilios</p>
+                  <p>• Seguridad acuática durante el evento</p>
+                  <p className="text-sm text-gray-500 mt-2">La playera conmemorativa es opcional y se adquiere por separado.</p>
                 </div>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-[#1e4958] text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Waves className="size-8" />
-                <span className="font-bold text-xl">Blu serial aguas abiertas</span>
+                <img src="/logo.jpg" alt="Blu" className="h-10 w-auto rounded-sm shadow-sm" />
               </div>
               <p className="text-gray-400">
-                Uniendo a la comunidad de natación en aguas abiertas en la hermosa Baja California Sur.
+                El serial de natación en aguas abiertas más prestigioso del noroeste de México. La Paz, Baja California Sur.
               </p>
             </div>
 
@@ -430,34 +603,31 @@ export default function LandingPage() {
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#about" className="hover:text-white transition-colors">Sobre nosotros</a></li>
                 <li><a href="#swims" className="hover:text-white transition-colors">Eventos</a></li>
-                <li><a href="#partners" className="hover:text-white transition-colors">Patrocinadores</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Inscripciones</a></li>
                 <li><a href="#contact" className="hover:text-white transition-colors">Contacto</a></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-medium text-lg mb-4">Recursos</h4>
+              <h4 className="font-medium text-lg mb-4">Requisitos</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Guías de seguridad</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Consejos de entrenamiento</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQs</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Términos y condiciones</a></li>
+                <li>Boya inflada obligatoria</li>
+                <li>Googles</li>
+                <li>Gorra oficial del serial</li>
+                <li>Carta de exoneración</li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-medium text-lg mb-4">Síguenos</h4>
               <div className="flex gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
+                <a href="https://www.facebook.com/profile.php?id=61583398012502" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
                   <Facebook className="size-6" />
                 </a>
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
                   <Instagram className="size-6" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">
-                  <Twitter className="size-6" />
-                </a>
-                <a href="mailto:info@bcsopenwater.com" className="hover:text-gray-300 transition-colors">
+                <a href="mailto:bluaguasabiertas@gmail.com" className="hover:text-gray-300 transition-colors">
                   <Mail className="size-6" />
                 </a>
               </div>
@@ -465,7 +635,7 @@ export default function LandingPage() {
           </div>
 
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>&copy; 2026 Blu serial aguas abiertas. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Blu Serial Aguas Abiertas. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

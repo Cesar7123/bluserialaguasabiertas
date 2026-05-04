@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Waves } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 
 export function Navigation() {
@@ -23,19 +23,19 @@ export function Navigation() {
     { label: 'Inicio', sectionId: 'home' },
     { label: 'Sobre nosotros', sectionId: 'about' },
     { label: 'Eventos', sectionId: 'swims' },
-    { label: 'Socios', sectionId: 'partners' },
-    { label: 'Patrocinadores', sectionId: 'sponsors' },
+    { label: 'Inscripciones', sectionId: 'pricing' },
+    { label: 'Colaboradores', sectionId: 'partners' },
     { label: 'Contacto', sectionId: 'contact' },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1e4958] backdrop-blur-sm shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <Waves className="size-8 text-blue-600" />
-            <span className="font-bold text-xl text-gray-900">Blu aguas abiertas</span>
+            <img src="/logo.jpg" alt="Blu" className="h-15 w-auto rounded-sm shadow-sm" />
+            {/* <span className="font-bold text-xl text-white">Blu aguas abiertas</span> */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -44,7 +44,7 @@ export function Navigation() {
               <button
                 key={item.sectionId}
                 onClick={() => scrollToSection(item.sectionId)}
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+                className="text-white hover:text-gray-200 transition-colors"
               >
                 {item.label}
               </button>
@@ -54,7 +54,7 @@ export function Navigation() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 text-white"
           >
             {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
@@ -67,7 +67,7 @@ export function Navigation() {
               <button
                 key={item.sectionId}
                 onClick={() => scrollToSection(item.sectionId)}
-                className="block w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                className="block w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors"
               >
                 {item.label}
               </button>

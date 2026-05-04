@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin, Calendar, Ruler, TrendingUp, ExternalLink } from 'lu
 import { swimEvents } from '../data/events';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { SwimRouteMap } from '../components/SwimRoute';
 
 export default function EventPage() {
   const { eventId } = useParams<{ eventId: string }>();
@@ -94,19 +95,6 @@ export default function EventPage() {
               <p className="text-gray-700 leading-relaxed">{event.description}</p>
             </Card>
 
-            {/* Course Map */}
-            <Card className="p-6">
-              <h2 className="text-2xl mb-4">Información del recorrido</h2>
-              <div className="bg-blue-50 rounded-lg p-6 mb-4">
-                <div className="aspect-video bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <div className="text-center text-blue-600">
-                    <MapPin className="size-12 mx-auto mb-2" />
-                    <p className="text-sm">Visualización del recorrido</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 leading-relaxed">{event.mapDescription}</p>
-            </Card>
           </div>
 
           {/* Sidebar */}
@@ -146,6 +134,13 @@ export default function EventPage() {
                 </div>
               </div>
             </Card>
+          </div>
+
+          {/* Course Map — full width */}
+          <div className="lg:col-span-3 space-y-4">
+            <h2 className="text-2xl">Información del recorrido</h2>
+            <p className="text-gray-700 leading-relaxed">{event.mapDescription}</p>
+            <SwimRouteMap routes={event.routes} />
           </div>
         </div>
       </div>

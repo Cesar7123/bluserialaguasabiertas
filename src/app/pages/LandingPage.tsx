@@ -54,13 +54,13 @@ export default function LandingPage() {
         ref={heroRef}
         className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden"
       >
-        <video
+        <motion.video
           src="/hero.MP4"
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-x-0 top-[-15%] h-[125%] w-full object-cover sm:top-0 sm:h-full"
           style={{ y: heroY }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-blue-900/40 to-blue-900/60" />

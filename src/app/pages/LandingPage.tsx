@@ -66,7 +66,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-blue-900/40 to-blue-900/60" />
 
         <motion.div
-          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto -mt-40 md:-mt-32"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
@@ -95,7 +95,7 @@ export default function LandingPage() {
             transition={{ duration: 0.7, delay: 0.4 }}
           >
             Diseñado para desafiar a
-            atletas de todos los niveles; disfruta la belleza natural y la
+            atletas de todos los niveles disfruta la belleza natural y la
             diversidad marina del Golfo de California.
           </motion.p>
           <motion.div

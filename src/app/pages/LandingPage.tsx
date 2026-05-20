@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import {
   MapPin,
   Users,
   Award,
-  Heart,
   Facebook,
   Instagram,
-  Twitter,
   Mail,
   Phone,
   Calendar,
@@ -309,7 +307,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-1 gap-8 max-w-5xl mx-auto">
             {[
               {
                 title: 'Nado individual',
@@ -325,20 +323,20 @@ export default function LandingPage() {
                 border: 'border-blue-100',
                 badge: null,
               },
-              {
-                title: 'Serial completo',
-                price: '$3,000 MXN',
-                desc: 'Precio temprano. Hasta el 20 de Mayo de 2026.',
-                features: [
-                  'Acceso a los 4 nados',
-                  'Gorro de natación oficial (1)',
-                  'Medalla de participación por nado',
-                  'Trofeo al primer lugar',
-                  'Puntuación para serial',
-                ],
-                border: 'border-blue-600',
-                badge: 'RECOMENDADO',
-              }
+              // {
+              //   title: 'Serial completo',
+              //   price: '$3,000 MXN',
+              //   desc: 'Precio temprano. Hasta el 20 de Mayo de 2026.',
+              //   features: [
+              //     'Acceso a los 4 nados',
+              //     'Gorro de natación oficial (1)',
+              //     'Medalla de participación por nado',
+              //     'Trofeo al primer lugar',
+              //     'Puntuación para serial',
+              //   ],
+              //   border: 'border-blue-600',
+              //   badge: 'RECOMENDADO',
+              // }
             ].map((plan, i) => (
               <motion.div
                 key={plan.title + plan.price}
@@ -372,7 +370,7 @@ export default function LandingPage() {
           </div>
 
           <div className="text-center mt-8 text-gray-600">
-            <p>Precio tardío del serial completo: <strong>$3,000 MXN</strong> (del 1 de abril al 20 de mayo de 2026)</p>
+            {/* <p>Precio tardío del serial completo: <strong>$3,000 MXN</strong> (del 1 de abril al 20 de mayo de 2026)</p> */}
             <p className="text-sm mt-2">⚠️ No habrá reembolso. Las inscripciones son intransferibles.</p>
           </div>
         </div>
@@ -396,10 +394,10 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: 'HUAM Deportiva', desc: 'Organización de eventos deportivos en BCS' },
-              { name: 'Tania Robles Natación', desc: 'Rayas by Tania Robles' },
-              { name: 'CEMDA', desc: 'Centro Mexicano de Derecho Ambiental, A.C.' },
-              { name: 'Natación Flippers', desc: 'Salvamento acuático y guardavidas' },
+              { name: 'HUAM Deportiva', desc: 'Organización de eventos deportivos en BCS', logo: '/huam-logo.svg' },
+              { name: 'Tania Robles Natación', desc: 'Rayas by Tania Robles', logo: '/TANIA ROBLES-LOGO-TRANSPARENTE.png' },
+              { name: 'CEMDA', desc: 'Centro Mexicano de Derecho Ambiental, A.C.', logo: '/cemda_logo.webp' },
+              { name: 'Natación Flippers', desc: 'Salvamento acuático y guardavidas', logo: '/flippers.jpeg' },
             ].map((partner, index) => (
               <motion.div
                 key={partner.name}
@@ -410,7 +408,12 @@ export default function LandingPage() {
               >
                 <Card className="p-8 text-center hover:shadow-lg transition-shadow h-full">
                   <div className="text-center">
-                    <Heart className="size-12 text-blue-600 mx-auto mb-3" />
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="mx-auto mb-3 h-12 object-contain"
+                      loading="lazy"
+                    />
                     <p className="font-bold text-gray-800 mb-1">{partner.name}</p>
                     <p className="text-sm text-gray-500">{partner.desc}</p>
                   </div>
@@ -446,6 +449,24 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Instagram Gallery Section */}
+      {/* <section id="instagram" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl mb-4">Galería</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Publicaciones recientes de Instagram (@blu_la_paz)</p>
+          </motion.div>
+
+          <InstagramGallery />
+        </div>
+      </section> */}
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white">
@@ -628,7 +649,7 @@ export default function LandingPage() {
                 <a href="https://www.facebook.com/profile.php?id=61583398012502" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
                   <Facebook className="size-6" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
+                <a href="https://www.instagram.com/blu_la_paz" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">
                   <Instagram className="size-6" />
                 </a>
                 <a href="mailto:bluaguasabiertas@gmail.com" className="hover:text-gray-300 transition-colors">
@@ -646,3 +667,63 @@ export default function LandingPage() {
     </div>
   );
 }
+
+// function InstagramGallery() {
+//   const [posts, setPosts] = useState<Array<any>>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     let mounted = true;
+//     // This endpoint should be implemented server-side to proxy Instagram API or return cached feed.
+//     // Example: GET /api/instagram?user=blu_la_paz&count=8
+//     fetch('/api/instagram?user=blu_la_paz&count=8')
+//       .then((res) => {
+//         if (!res.ok) throw new Error('Network response was not ok');
+//         return res.json();
+//       })
+//       .then((data) => {
+//         if (!mounted) return;
+//         // Expecting data to be an array of posts: { id, media_url, permalink, thumbnail_url }
+//         setPosts(Array.isArray(data) ? data : []);
+//       })
+//       .catch((err) => {
+//         console.warn('Instagram fetch failed:', err);
+//         if (mounted) setError('No se pudo cargar la galería.');
+//       })
+//       .finally(() => {
+//         if (mounted) setLoading(false);
+//       });
+
+//     return () => {
+//       mounted = false;
+//     };
+//   }, []);
+
+//   if (loading) {
+//     return (
+//       <div className="text-center py-12">
+//         <div className="text-gray-600">Cargando galería...</div>
+//       </div>
+//     );
+//   }
+
+//   if (error || posts.length === 0) {
+//     return (
+//       <div className="text-center py-12">
+//         <p className="text-gray-600 mb-4">No hay publicaciones disponibles. Sigue nuestra cuenta en Instagram.</p>
+//         <a href="https://www.instagram.com/blu_la_paz" target="_blank" rel="noopener noreferrer" className="inline-block bg-pink-500 text-white px-6 py-2 rounded-md">@blu_la_paz</a>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+//       {posts.map((p: any) => (
+//         <a key={p.id} href={p.permalink || `https://www.instagram.com/p/${p.id}/`} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg">
+//           <img src={p.media_url || p.thumbnail_url} alt={p.caption ? p.caption.slice(0, 80) : 'Instagram post'} className="w-full h-40 object-cover hover:scale-105 transition-transform duration-200" loading="lazy" />
+//         </a>
+//       ))}
+//     </div>
+//   );
+// }

@@ -55,14 +55,18 @@ export default function LandingPage() {
         className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden"
       >
         <motion.video
-          src="/hero.MP4"
+          poster="/hero-poster.jpg"
           autoPlay
           loop
           muted
           playsInline
+          preload="metadata"
           className="absolute inset-x-0 top-[-15%] h-[125%] w-full object-cover sm:top-0 sm:h-full"
           style={{ y: heroY }}
-        />
+        >
+          <source src="/hero.webm" type="video/webm" />
+          <source src="/hero.MP4" type="video/mp4" />
+        </motion.video>
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-blue-900/40 to-blue-900/60" />
 
         <motion.div

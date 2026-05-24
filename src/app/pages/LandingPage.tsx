@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import {
   MapPin,
@@ -12,7 +12,8 @@ import {
   Calendar,
   ChevronRight,
   Ruler,
-  TrendingUp
+  TrendingUp,
+  Trophy
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -283,6 +284,23 @@ export default function LandingPage() {
                         <ChevronRight className="size-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
+
+                    {event.resultsLink && (
+                      <Button
+                        variant="outline"
+                        className="w-full group mt-3 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                        asChild
+                      >
+                        <a
+                          href={event.resultsLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Trophy className="size-4 mr-2" />
+                          Ver resultados
+                        </a>
+                      </Button>
+                    )}
                   </div>
                 </Card>
               </motion.div>

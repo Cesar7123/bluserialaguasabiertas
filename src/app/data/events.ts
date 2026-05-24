@@ -17,6 +17,7 @@ export interface SwimEvent {
   heroImage: string;
   mapDescription: string;
   registrationLink: string;
+  resultsLink?: string;
   price: string;
   routes: SwimRouteData[];
 }
@@ -72,6 +73,7 @@ export const swimEvents: SwimEvent[] = [
     mapDescription:
       'Salida desde Playa El Coromuel. El recorrido sigue la curva natural de la bahía de La Paz. Embarcaciones de seguridad posicionadas cada 500 metros.',
     registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas',
+    resultsLink: 'https://sporthive.com/events/s/71b4c5f5-5d17-476f-88ca-6b217ef0a6bd?fbclid=IwZnRzaASADuRleHRuA2FlbQIxMQBzcnRjBmFwcF9pZAo2NjI4NTY4Mzc5AAEeA3Dqyvm7rI1H65OACsCkW63b4MuxRSbjXR9mx0qAf-fm4fpm-YV04L0lckE_aem_r5r4-8uPJK4rvrWquw6FKA',
     price: '$850 MXN',
     routes: [
       buildRoute('500 m', '#2563EB',

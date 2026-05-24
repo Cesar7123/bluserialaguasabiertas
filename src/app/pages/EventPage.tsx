@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Calendar, Ruler, TrendingUp, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Ruler, TrendingUp, ExternalLink, Trophy } from 'lucide-react';
 import { swimEvents } from '../data/events';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -94,6 +94,31 @@ export default function EventPage() {
               <h2 className="text-2xl mb-4">Sobre este evento</h2>
               <p className="text-gray-700 leading-relaxed">{event.description}</p>
             </Card>
+
+            {/* Results */}
+            {event.resultsLink && (
+              <Card className="p-6 border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="inline-flex items-center justify-center size-10 bg-blue-600 rounded-full shrink-0">
+                    <Trophy className="size-5 text-white" />
+                  </div>
+                  <h2 className="text-2xl">Resultados</h2>
+                </div>
+                <p className="text-gray-700 mb-5">
+                  Consulta los resultados oficiales de este evento en la plataforma SportHive.
+                </p>
+                <a
+                  href={event.resultsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+                >
+                  <Trophy className="size-4" />
+                  Ver resultados
+                  <ExternalLink className="size-4" />
+                </a>
+              </Card>
+            )}
 
           </div>
 

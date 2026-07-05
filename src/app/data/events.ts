@@ -132,6 +132,7 @@ export const swimEvents: SwimEvent[] = [
     mapDescription:
       'Salida desde Playa El Caimancito. Recorrido paralelo a la costa con aguas generalmente tranquilas. Seguridad acuática proporcionada por Natación Flippers.',
     registrationLink: 'https://www.huamdeportiva.com/blu-serial-aguas-abiertas-el-caimancito',
+    resultsLink: 'https://raceclocker.com/ced3effe',
     price: '$850 MXN',
     routes: [
       buildRoute('500 m', '#2563EB',

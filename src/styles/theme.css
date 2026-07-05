@@ -284,3 +284,14 @@
   font-family: system-ui, -apple-system, sans-serif !important;
   font-size: 13px !important;
 }
+
+/* ── YouTube iframe hide controls ── */
+
+iframe[src*="youtube.com"] {
+  border: none !important;
+  outline: none !important;
+}
+
+iframe[src*="youtube.com"]::-webkit-media-controls {
+  display: none !important;
+}

@@ -132,17 +132,17 @@ export default function EventPage() {
                 <div className="text-sm text-gray-500">Por participante</div>
               </div>
 
-              <Button
-                className="w-full mb-4"
-                size="lg"
-                onClick={() => {
-                  // Scroll to contact form
-                  window.location.href = '/#contact';
-                }}
+              <a
+                href={event.registrationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
               >
-                Registrarse
-                <ExternalLink className="size-4 ml-2" />
-              </Button>
+                <Button className="w-full mb-4" size="lg">
+                  Registrarse
+                  <ExternalLink className="size-4 ml-2" />
+                </Button>
+              </a>
 
               <div className="border-t pt-4 space-y-3 text-sm text-gray-600">
                 <div className="flex items-center gap-2">

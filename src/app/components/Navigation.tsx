@@ -25,6 +25,7 @@ export function Navigation() {
     { label: 'Eventos', sectionId: 'swims' },
     { label: 'Inscripciones', sectionId: 'pricing' },
     { label: 'Colaboradores', sectionId: 'partners' },
+    { label: 'Galería', sectionId: 'gallery' },
     { label: 'Contacto', sectionId: 'contact' },
   ];
 

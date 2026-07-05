@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import emailjs from '@emailjs/browser';
 import {
   MapPin,
   Users,
@@ -22,6 +23,7 @@ import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { swimEvents } from '../data/events';
 import { toast } from 'sonner';
+import Gallery from '../components/Gallery';
 
 export default function LandingPage() {
   const heroRef = useRef<HTMLElement>(null);
@@ -38,12 +40,83 @@ export default function LandingPage() {
     phone: '',
     message: ''
   });
+  const [isSending, setIsSending] = useState(false);
+  const [cooldownEnd, setCooldownEnd] = useState<number | null>(null);
+  const [honeypot, setHoneypot] = useState('');
+  const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+  const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+  const COOLDOWN_SECONDS = 60;
+
+  const getRemainingCooldown = () => {
+    if (!cooldownEnd) return 0;
+    return Math.max(0, Math.ceil((cooldownEnd - Date.now()) / 1000));
   };
+
+  const isInCooldown = () => {
+    return cooldownEnd !== null && Date.now() < cooldownEnd;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Honeypot check - if filled, it's a bot
+    if (honeypot) {
+      toast.success('Mensaje enviado correctamente.');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      return;
+    }
+
+    if (isInCooldown()) {
+      toast.error(`Espera ${getRemainingCooldown()} segundos antes de enviar otro mensaje.`);
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          to_email: 'bluaguasabiertas@gmail.com',
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+
+      console.log('EmailJS success:', result);
+
+      // Set cooldown
+      const newCooldownEnd = Date.now() + COOLDOWN_SECONDS * 1000;
+      setCooldownEnd(newCooldownEnd);
+      localStorage.setItem('blu_email_last_sent', String(newCooldownEnd));
+
+      toast.success('Mensaje enviado correctamente. Pronto te contactaremos.');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error: any) {
+      toast.error(`No se pudo enviar, intenete más tarde.`);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  // Check for existing cooldown on mount and set up interval
+  useEffect(() => {
+    const stored = localStorage.getItem('blu_email_last_sent');
+    if (stored) {
+      const end = parseInt(stored, 10);
+      if (Date.now() < end) {
+        setCooldownEnd(end);
+      } else {
+        localStorage.removeItem('blu_email_last_sent');
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -412,10 +485,10 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: 'HUAM Deportiva', desc: 'Organización de eventos deportivos en BCS', logo: '/huam-logo.svg' },
-              { name: 'Tania Robles Natación', desc: 'Rayas by Tania Robles', logo: '/TANIA ROBLES-LOGO-TRANSPARENTE.png' },
-              { name: 'CEMDA', desc: 'Centro Mexicano de Derecho Ambiental, A.C.', logo: '/cemda_logo.webp' },
-              { name: 'Natación Flippers', desc: 'Salvamento acuático y guardavidas', logo: '/flippers.jpeg' },
+              { name: 'HUAM Deportiva', desc: 'Organización de eventos deportivos en BCS', logo: '/huam-logo.svg', website: 'https://www.huamdeportiva.com' },
+              { name: 'Tania Robles Natación', desc: 'Rayas by Tania Robles', logo: '/TANIA ROBLES-LOGO-TRANSPARENTE.png', website: '' },
+              { name: 'CEMDA', desc: 'Centro Mexicano de Derecho Ambiental, A.C.', logo: '/cemda_logo.webp', website: 'https://www.cemda.org.mx' },
+              { name: 'Natación Flippers', desc: 'Salvamento acuático y guardavidas', logo: '/flippers.jpeg', website: 'https://www.flippers.mx' },
             ].map((partner, index) => (
               <motion.div
                 key={partner.name}
@@ -424,7 +497,10 @@ export default function LandingPage() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, delay: index * 0.12 }}
               >
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow h-full">
+                <Card
+                  className="p-8 text-center hover:shadow-lg transition-shadow h-full *:cursor-pointer"
+                  onClick={() => partner.website && window.open(partner.website, '_blank')}
+                >
                   <div className="text-center">
                     <img
                       src={partner.logo}
@@ -468,8 +544,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Instagram Gallery Section */}
-      {/* <section id="instagram" className="py-20 bg-white">
+      {/* Gallery Section */}
+      <section id="gallery" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="text-center mb-12"
@@ -479,12 +555,14 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl mb-4">Galería</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Publicaciones recientes de Instagram (@blu_la_paz)</p>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Momentos capturados de nuestras competencias y entrenamientos
+            </p>
           </motion.div>
 
-          <InstagramGallery />
+          <Gallery />
         </div>
-      </section> */}
+      </section>
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white">
@@ -555,8 +633,23 @@ export default function LandingPage() {
                       rows={5}
                     />
                   </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    Enviar mensaje
+                  {/* Honeypot - hidden from users, catches bots */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSending || isInCooldown()}
+                  >
+                    {isSending ? 'Enviando...' : isInCooldown() ? `Espera ${getRemainingCooldown()}s para reenviar` : 'Enviar mensaje'}
                   </Button>
                 </form>
               </Card>

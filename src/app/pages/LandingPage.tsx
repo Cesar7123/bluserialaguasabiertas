@@ -565,7 +565,7 @@ export default function LandingPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="text-center mb-16"
@@ -583,8 +583,8 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6 }}
             >
@@ -658,8 +658,8 @@ export default function LandingPage() {
             {/* Contact Info */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: 0.15 }}
             >

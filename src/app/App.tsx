@@ -7,7 +7,7 @@ import EventPage from './pages/EventPage';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen">
+      <div className="min-h-screen overflow-x-hidden">
         <Navigation />
         <div className="pt-16">
           <Routes>

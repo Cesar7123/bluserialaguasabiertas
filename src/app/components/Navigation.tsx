@@ -9,7 +9,7 @@ export function Navigation() {
 
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
-      window.location.href = `/#${sectionId}`;
+      window.location.assign(`/#${sectionId}`);
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -30,7 +30,7 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1e4958] backdrop-blur-sm shadow-sm">
+    <nav aria-label="Navegación principal" className="fixed top-0 left-0 right-0 z-50 bg-[#123b4a]/95 backdrop-blur-sm shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -45,17 +45,24 @@ export function Navigation() {
               <button
                 key={item.sectionId}
                 onClick={() => scrollToSection(item.sectionId)}
-                className="text-white hover:text-gray-200 transition-colors"
+                className="min-h-11 text-white hover:text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300 transition-colors"
               >
                 {item.label}
               </button>
             ))}
           </div>
 
+          <Link to="/preguntas-frecuentes" className="hidden md:inline-flex min-h-11 items-center rounded-full border border-white/40 px-4 text-sm font-semibold text-white hover:bg-white hover:text-[#123b4a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300 transition-colors">
+            Preguntas frecuentes
+          </Link>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-white/10 text-white"
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+            className="md:hidden flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-white/10 text-white focus-visible:outline-2 focus-visible:outline-cyan-300"
           >
             {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
@@ -63,16 +70,19 @@ export function Navigation() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div id="mobile-navigation" className="md:hidden py-4 border-t border-white/20">
             {navItems.map((item) => (
               <button
                 key={item.sectionId}
                 onClick={() => scrollToSection(item.sectionId)}
-                className="block w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors"
+                className="block min-h-11 w-full text-left px-4 py-3 text-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-cyan-300 transition-colors"
               >
                 {item.label}
               </button>
             ))}
+            <Link to="/preguntas-frecuentes" onClick={() => setIsOpen(false)} className="block min-h-11 px-4 py-3 font-semibold text-cyan-200 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-cyan-300">
+              Preguntas frecuentes
+            </Link>
           </div>
         )}
       </div>

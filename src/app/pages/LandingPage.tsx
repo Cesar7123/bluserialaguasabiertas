@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import emailjs from '@emailjs/browser';
 import {
   MapPin,
@@ -49,6 +51,31 @@ export default function LandingPage() {
 
   const COOLDOWN_SECONDS = 60;
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.utils.toArray<HTMLElement>('.gsap-reveal').forEach((element) => {
+        gsap.from(element, {
+          opacity: 0,
+          y: 24,
+          duration: 0.55,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: element, start: 'top 88%', once: true },
+        });
+      });
+      gsap.from('.gsap-grid-item', {
+        opacity: 0,
+        y: 16,
+        duration: 0.4,
+        stagger: 0.06,
+        ease: 'back.out(1.2)',
+        scrollTrigger: { trigger: '.gsap-grid', start: 'top 82%', once: true },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   const getRemainingCooldown = () => {
     if (!cooldownEnd) return 0;
     return Math.max(0, Math.ceil((cooldownEnd - Date.now()) / 1000));
@@ -88,8 +115,6 @@ export default function LandingPage() {
         },
         EMAILJS_PUBLIC_KEY
       );
-
-      console.log('EmailJS success:', result);
 
       // Set cooldown
       const newCooldownEnd = Date.now() + COOLDOWN_SECONDS * 1000;
@@ -209,13 +234,13 @@ export default function LandingPage() {
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl mb-6">Sobre el Serial</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="gsap-reveal text-4xl md:text-5xl mb-6">Sobre el Serial</h2>
+            <p className="text-xl text-slate-700 max-w-3xl mx-auto">
               El serial de natación en aguas abiertas más prestigioso del noroeste de México
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="gsap-grid grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: <MapPin className="size-8 text-blue-600" />,
@@ -240,12 +265,12 @@ export default function LandingPage() {
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.5, delay: i * 0.15 }}
               >
-                <Card className="p-8 text-center hover:shadow-lg transition-shadow h-full">
+                <Card className="gsap-grid-item p-8 text-center hover:shadow-lg transition-shadow h-full">
                   <div className="inline-flex items-center justify-center self-center size-16 bg-blue-100 rounded-full mb-6">
                     {item.icon}
                   </div>
                   <h3 className="text-2xl mb-4">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
+                  <p className="text-slate-700">{item.desc}</p>
                 </Card>
               </motion.div>
             ))}
@@ -287,7 +312,7 @@ export default function LandingPage() {
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
                     <div className="text-3xl font-bold text-blue-600 mb-2">{stat.num}</div>
-                    <div className="text-gray-600">{stat.label}</div>
+                    <div className="text-slate-700">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>
@@ -307,7 +332,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl mb-6">Próximos eventos</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+             <p className="text-xl text-slate-700 max-w-3xl mx-auto">
               Elige entre nuestra selección de eventos de natación en aguas abiertas durante todo el año
             </p>
           </motion.div>
@@ -321,7 +346,7 @@ export default function LandingPage() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
               >
-                <Card className="overflow-hidden hover:shadow-xl transition-shadow h-full">
+                <Card className="gsap-grid-item overflow-hidden hover:shadow-xl transition-shadow h-full">
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={event.heroImage}
@@ -334,20 +359,20 @@ export default function LandingPage() {
                   </div>
                   <div className="p-6">
                     <h3 className="text-2xl mb-3">{event.title}</h3>
-                    <p className="text-gray-600 mb-4">{event.shortDescription}</p>
+                    <p className="text-slate-700 mb-4">{event.shortDescription}</p>
 
                     <div className="grid grid-cols-3 gap-4 mb-6 text-sm">
                       <div className="flex items-center gap-2">
                         <Calendar className="size-4 text-blue-600 shrink-0" />
-                        <span className="text-gray-600 truncate">{event.date.split(',')[0]}</span>
+                        <span className="text-slate-700 truncate">{event.date.split(',')[0]}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Ruler className="size-4 text-blue-600 shrink-0" />
-                        <span className="text-gray-600">{event.distance}</span>
+                        <span className="text-slate-700">{event.distance}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <TrendingUp className="size-4 text-blue-600 shrink-0" />
-                        <span className="text-gray-600 truncate">{event.difficulty}</span>
+                        <span className="text-slate-700 truncate">{event.difficulty}</span>
                       </div>
                     </div>
 
@@ -393,7 +418,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl mb-6">Inscripciones</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+               <p className="text-xl text-slate-700 max-w-3xl mx-auto">
               Elige la modalidad que mejor se adapte a ti y asegura tu lugar en el serial
             </p>
           </motion.div>
@@ -444,8 +469,8 @@ export default function LandingPage() {
                   )}
                   <h3 className="text-2xl mb-2">{plan.title}</h3>
                   <div className="text-4xl font-bold text-blue-600 mb-4">{plan.price}</div>
-                  <p className="text-gray-600 mb-6">{plan.desc}</p>
-                  <ul className="text-left text-sm text-gray-600 space-y-2 mb-6 flex-1">
+                  <p className="text-slate-700 mb-6">{plan.desc}</p>
+                  <ul className="text-left text-sm text-slate-700 space-y-2 mb-6 flex-1">
                     {plan.features.map((f) => (
                       <li key={f}>✓ {f}</li>
                     ))}
@@ -460,7 +485,7 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div className="text-center mt-8 text-gray-600">
+          <div className="text-center mt-8 text-slate-700">
             {/* <p>Precio tardío del serial completo: <strong>$3,000 MXN</strong> (del 1 de abril al 20 de mayo de 2026)</p> */}
             <p className="text-sm mt-2">⚠️ No habrá reembolso. Las inscripciones son intransferibles.</p>
           </div>
@@ -478,7 +503,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl mb-6">Colaboradores</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+               <p className="text-xl text-slate-700 max-w-3xl mx-auto">
               Gracias a quienes hacen posible este serial
             </p>
           </motion.div>
@@ -509,7 +534,7 @@ export default function LandingPage() {
                       loading="lazy"
                     />
                     <p className="font-bold text-gray-800 mb-1">{partner.name}</p>
-                    <p className="text-sm text-gray-500">{partner.desc}</p>
+                    <p className="text-sm text-slate-700">{partner.desc}</p>
                   </div>
                 </Card>
               </motion.div>
@@ -529,7 +554,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl mb-6">Patrocinadores</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+               <p className="text-xl text-slate-700 max-w-3xl mx-auto">
               ¿Te interesa patrocinar el serial? Conecta tu marca con la comunidad de natación en aguas abiertas.
             </p>
           </motion.div>
@@ -688,7 +713,7 @@ export default function LandingPage() {
                     <MapPin className="size-6 text-blue-600 mt-1 shrink-0" />
                     <div>
                       <div className="font-medium mb-1">Ubicación</div>
-                      <p className="text-gray-600">
+                      <p className="text-slate-700">
                         La Paz, Baja California Sur<br />
                         México
                       </p>
@@ -713,7 +738,7 @@ export default function LandingPage() {
                   <p>• Abastecimiento de recuperación en meta</p>
                   <p>• Servicio de primeros auxilios</p>
                   <p>• Seguridad acuática durante el evento</p>
-                  <p className="text-sm text-gray-500 mt-2">La playera conmemorativa es opcional y se adquiere por separado.</p>
+                  <p className="text-sm text-slate-700 mt-2">La playera conmemorativa es opcional y se adquiere por separado.</p>
                 </div>
               </Card>
             </motion.div>

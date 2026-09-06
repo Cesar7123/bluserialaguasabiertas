@@ -143,19 +143,25 @@ Install and configure:
 ## 🎯 Target Keywords
 
 ### Primary Keywords (Spanish)
-1. natación aguas abiertas La Paz
-2. eventos natación Baja California Sur
-3. nado en mar abierto La Paz
-4. competencias natación BCS
-5. serial natación aguas abiertas México
+1. aguas abiertas
+2. aguas abierta méxico
+3. eventos natación Baja California Sur
+4. nado en mar abierto La Paz
+5. competencias natación BCS
+6. serial natación aguas abiertas México
+7. natación aguas abiertas La Paz
 
 ### Secondary Keywords (Spanish)
+- natación la paz
+- natación bcs
+- natación méxico
 - natación Mar de Cortés
 - eventos deportivos La Paz
 - carreras natación Baja California
 - open water swimming La Paz
 
 ### English Keywords (Secondary Market)
+- open water méxico
 - open water swimming La Paz
 - sea of Cortez swimming events
 - Baja California Sur swimming

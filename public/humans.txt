@@ -1,0 +1,8 @@
+/* TEAM */
+Organization: Blu Serial Aguas Abiertas
+Location: La Paz, Baja California Sur, México
+Contact: bluaguasabiertas@gmail.com
+
+/* SITE */
+Description: Serial de natación en aguas abiertas en el Golfo de California.
+Language: es-MX
